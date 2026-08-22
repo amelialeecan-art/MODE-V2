@@ -2,7 +2,7 @@ import { describe, it, expect, beforeEach } from 'vitest'
 import { ModeDB } from '@/data/db/db'
 import { createRepositories, type Repositories } from '@/data/repositories'
 import { importLegacyExport } from '@/data/migrations/runMigration'
-import legacyExport from '@/data/migrations/__fixtures__/legacyExport.json'
+import legacyExport from '@/data/migrations/__fixtures__/sampleExport.json'
 import type { LegacyExport } from '@/data/migrations/legacyTypes'
 import { todayLocalDate, nowISO } from '@/shared/time/time'
 
@@ -32,10 +32,12 @@ describe('repositories · provenance stamping', () => {
     const all = await repos.state.all()
     const manual = all.filter((s) => s.source === 'manual')
     const legacy = all.filter((s) => s.source === 'legacy_import')
-    expect(manual.length).toBe(1)
-    expect(legacy.length).toBe(53)
-    expect(manual[0].conversionVersion).toBeUndefined()
-    expect(legacy[0].conversionVersion).toBe(1)
+    // 내가 넣은 manual 1 + export 안 보존된 V2 manual 2 = 3
+    expect(manual.length).toBe(3)
+    // V1 변환본 3 (06-03 은 V2 충돌로 skip)
+    expect(legacy.length).toBe(3)
+    expect(legacy.every((s) => s.conversionVersion === 1)).toBe(true)
+    expect(manual.every((s) => s.conversionVersion === undefined)).toBe(true)
   })
 
   it('put 은 schemaVersion/createdAt/updatedAt 를 찍는다', async () => {

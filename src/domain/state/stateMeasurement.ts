@@ -18,7 +18,19 @@ export interface StateMeasurement extends Provenance, TimeProvenance {
    */
   promptedMetrics: CoreMetric[]
   metrics: CoreMetricValues
+  /**
+   * metric 단위 변환 provenance. 여기 키가 있는 metric 은 "직접 측정" 이 아니라
+   * legacy 원자료에서 규칙으로 파생된 값이다(예: craving = max(sweet,salty,greasy)).
+   * 직접 측정값에는 이 키가 없다 → 분석에서 직접값/legacy 변환값을 구별할 수 있다.
+   * manual 신규 입력은 항상 이 필드가 비어 있다.
+   */
+  conversionRules?: Partial<Record<CoreMetric, string>>
   note?: string
 }
 
 export type StateMeasurementInput = Omit<StateMeasurement, 'id' | 'createdAt' | 'updatedAt' | 'schemaVersion'>
+
+/** metric 이 직접 측정값인지(= legacy 파생이 아닌지). */
+export function isDirectlyMeasured(m: Pick<StateMeasurement, 'conversionRules'>, metric: CoreMetric): boolean {
+  return m.conversionRules?.[metric] === undefined
+}

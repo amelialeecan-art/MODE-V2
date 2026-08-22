@@ -20,6 +20,7 @@ export async function importLegacyExport(
 
   await repos.sleep.bulkImport(bundle.sleep)
   await repos.state.bulkImport(bundle.state)
+  await repos.meal.bulkImport(bundle.meal)
   await repos.cycle.bulkImport(bundle.cycle)
   await repos.context.bulkImport(bundle.context)
   await repos.recovery.bulkImport(bundle.recovery)

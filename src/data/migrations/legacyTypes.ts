@@ -16,6 +16,11 @@ export interface LegacyTables {
   dailyScores?: unknown[]
   patternInsights?: unknown[]
   userSettings?: LegacyUserSettings[]
+  // 아래는 export 안에 이미 존재할 수 있는 신 V2 raw record — 그대로 보존한다.
+  stateMeasurements?: unknown[]
+  sleepEpisodes?: unknown[]
+  mealEpisodes?: unknown[]
+  cycleRecords?: unknown[]
   [k: string]: unknown
 }
 

@@ -5,3 +5,9 @@ dist-ssr
 .DS_Store
 .vite
 coverage
+
+# 실제 개인 데이터 export 는 절대 커밋하지 않는다 (테스트 fixture 는 합성 sampleExport.json 만).
+mode-export*.json
+**/legacyExport*.json
+*.private.json
+*-real.json

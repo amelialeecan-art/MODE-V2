@@ -26,10 +26,11 @@ const backup = {
   tables: {
     stateMeasurements: bundle.state,
     sleepEpisodes: bundle.sleep,
+    mealEpisodes: bundle.meal,
     cycleRecords: bundle.cycle,
     contextEvents: bundle.context,
     recoveryActions: bundle.recovery,
-    mealEpisodes: [], activityEpisodes: [], medicationProfiles: [],
+    activityEpisodes: [], medicationProfiles: [],
     medicationDoses: [], healthExceptions: [], screenExposures: [],
     weightMeasurements: [], experiments: [],
   },

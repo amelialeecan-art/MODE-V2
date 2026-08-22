@@ -1,0 +1,115 @@
+{
+  "app": "MODE",
+  "version": 2,
+  "exportedAt": "2026-06-15T00:00:00.000Z",
+  "tables": {
+    "dailyLogs": [
+      {
+        "id": 1, "date": "2026-06-01",
+        "moodLow": 0, "anxiety": 0, "irritability": 0, "energy": 6, "focus": 5,
+        "impulsivity": 0, "appetite": 3, "sweetCraving": 0, "saltyCraving": 0, "greasyCraving": 0,
+        "bingeUrge": 0, "bodyDiscomfort": 0, "pain": 0, "bloating": 0, "fatigue": 0, "heaviness": 0,
+        "calm": 7, "sadness": 0, "selfCriticism": 0, "headache": 0, "digestion": 0,
+        "lastNightSleep": { "hours": 8, "quality": 6, "issues": ["woke_late"] },
+        "createdAt": "2026-06-01T22:00:00.000Z", "updatedAt": "2026-06-01T22:00:00.000Z"
+      },
+      {
+        "id": 2, "date": "2026-06-02",
+        "moodLow": 5, "anxiety": 7, "irritability": 4, "energy": 2, "focus": 3,
+        "impulsivity": 6, "appetite": 7, "sweetCraving": 9, "saltyCraving": 3, "greasyCraving": 5,
+        "bingeUrge": 7, "bodyDiscomfort": 4, "pain": 7, "bloating": 3, "fatigue": 8, "heaviness": 6,
+        "calm": 2, "sadness": 5, "selfCriticism": 0, "headache": 0, "digestion": 0,
+        "lastNightSleep": { "hours": 5, "quality": 3, "issues": ["sleep_late", "sleep_waking"] },
+        "createdAt": "2026-06-02T22:00:00.000Z", "updatedAt": "2026-06-02T22:00:00.000Z"
+      },
+      {
+        "id": 3, "date": "2026-06-03",
+        "moodLow": 3, "anxiety": 4, "irritability": 2, "energy": 2, "focus": 4,
+        "impulsivity": 0, "appetite": 5, "sweetCraving": 5, "saltyCraving": 5, "greasyCraving": 0,
+        "bingeUrge": 3, "bodyDiscomfort": 0, "pain": 0, "bloating": 0, "fatigue": 4, "heaviness": 3,
+        "calm": 5, "sadness": 4, "selfCriticism": 0, "headache": 0, "digestion": 0,
+        "lastNightSleep": { "hours": 7, "quality": 5, "issues": [] },
+        "createdAt": "2026-06-03T22:00:00.000Z", "updatedAt": "2026-06-03T22:00:00.000Z"
+      },
+      {
+        "id": 4, "date": "2026-06-10",
+        "moodLow": 8, "anxiety": 8, "irritability": 7, "energy": 1, "focus": 1,
+        "impulsivity": 9, "appetite": 9, "sweetCraving": 7, "saltyCraving": 9, "greasyCraving": 9,
+        "bingeUrge": 9, "bodyDiscomfort": 9, "pain": 0, "bloating": 7, "fatigue": 10, "heaviness": 9,
+        "calm": 1, "sadness": 8, "selfCriticism": 0, "headache": 0, "digestion": 0,
+        "lastNightSleep": { "hours": 6, "quality": 4, "issues": ["sleep_nightmare"] },
+        "createdAt": "2026-06-10T22:00:00.000Z", "updatedAt": "2026-06-10T22:00:00.000Z"
+      }
+    ],
+    "cycleLogs": [
+      {
+        "id": 1, "date": "2026-06-05", "periodStart": true, "periodEnd": false,
+        "flowLevel": "normal", "periodPain": 5,
+        "createdAt": "2026-06-05T09:00:00.000Z", "updatedAt": "2026-06-05T09:00:00.000Z"
+      }
+    ],
+    "eventLogs": [
+      { "id": 1, "date": "2026-06-01", "eventCode": "work_heavy", "eventLabel": "일이 많았음", "category": "work", "timing": "today", "intensity": 5, "isCustom": false, "createdAt": "2026-06-01T22:00:00.000Z" },
+      { "id": 2, "date": "2026-06-01", "eventCode": "ate_sweets", "eventLabel": "단 음식 먹음", "category": "food", "timing": "today", "intensity": 5, "isCustom": false, "createdAt": "2026-06-01T22:00:00.000Z" },
+      { "id": 3, "date": "2026-06-02", "eventCode": "conflict", "eventLabel": "사람과 갈등이 있었음", "category": "relationship", "timing": "today", "intensity": 7, "isCustom": false, "createdAt": "2026-06-02T22:00:00.000Z" },
+      { "id": 4, "date": "2026-06-02", "eventCode": "irregular_sleep", "eventLabel": "기상/취침 불규칙", "category": "sleep", "timing": "today", "intensity": 5, "isCustom": false, "createdAt": "2026-06-02T22:00:00.000Z" }
+    ],
+    "recoveryLogs": [
+      { "id": 1, "date": "2026-06-02", "actionCode": "talk_family", "actionLabel": "가족과 대화", "category": "relationship", "effect": "little_better", "direction": "positive", "createdAt": "2026-06-02T22:00:00.000Z" },
+      { "id": 2, "date": "2026-06-10", "actionCode": "shower", "actionLabel": "샤워", "category": "body", "effect": "much_better", "direction": "positive", "createdAt": "2026-06-10T22:00:00.000Z" }
+    ],
+    "dailyScores": [
+      { "id": 1, "date": "2026-06-01", "emotionalLoad": 0, "appetiteLoad": 0, "sleepLoad": 10, "bodyLoad": 0, "cycleLoad": 10, "eventLoad": 40, "rhythmLoad": 12, "recoveryScore": 55, "dayType": "stable", "dayTypeSubLabel": "안정 구간", "confidence": 70, "createdAt": "2026-06-01T22:00:00.000Z", "updatedAt": "2026-06-01T22:00:00.000Z" },
+      { "id": 2, "date": "2026-06-02", "emotionalLoad": 60, "appetiteLoad": 55, "sleepLoad": 70, "bodyLoad": 40, "cycleLoad": 10, "eventLoad": 62, "rhythmLoad": 58, "recoveryScore": 30, "dayType": "emotion_sensitive", "dayTypeSubLabel": "대화 속도 조절", "confidence": 65, "createdAt": "2026-06-02T22:00:00.000Z", "updatedAt": "2026-06-02T22:00:00.000Z" }
+    ],
+    "patternInsights": [
+      { "id": 1, "type": "sleep_mood", "message": "수면이 짧으면 기분 저하가 높았음", "effectSize": 0.6, "confidence": 62, "createdAt": "2026-06-10T00:00:00.000Z" }
+    ],
+    "userSettings": [
+      { "id": 1, "cycleEnabled": true, "averageCycleLength": 28, "toneMode": "witty", "reminderEnabled": false, "privacyMode": "local", "createdAt": "2026-06-01T00:00:00.000Z", "updatedAt": "2026-06-15T00:00:00.000Z" }
+    ],
+    "stateMeasurements": [
+      {
+        "id": 1, "localDate": "2026-06-03", "recordedAt": "2026-06-03T12:30:00.000Z", "timezoneOffsetMinutes": 540,
+        "checkInType": "evening",
+        "promptedMetrics": ["moodLow", "anxiety", "energy", "bloating"],
+        "metrics": { "moodLow": 0, "anxiety": "unknown", "energy": 7 },
+        "source": "manual", "schemaVersion": 1,
+        "createdAt": "2026-06-03T12:30:00.000Z", "updatedAt": "2026-06-03T12:30:00.000Z"
+      },
+      {
+        "id": 2, "localDate": "2026-06-10", "recordedAt": "2026-06-10T00:00:00.000Z", "timezoneOffsetMinutes": 540,
+        "checkInType": "morning",
+        "promptedMetrics": ["moodLow", "anxiety", "energy", "focus", "positiveAffect"],
+        "metrics": { "moodLow": 1, "anxiety": 2, "energy": 6, "focus": 5, "positiveAffect": 7 },
+        "source": "manual", "schemaVersion": 1,
+        "createdAt": "2026-06-10T00:00:00.000Z", "updatedAt": "2026-06-10T00:00:00.000Z"
+      }
+    ],
+    "sleepEpisodes": [
+      {
+        "id": 1, "localDate": "2026-06-03",
+        "wentToBedAt": "2026-06-02T14:00:00.000Z", "sleepOnsetAt": "2026-06-02T15:00:00.000Z", "wakeAt": "2026-06-02T22:00:00.000Z",
+        "awakenings": 1, "satisfaction": 8, "source": "manual", "schemaVersion": 1,
+        "createdAt": "2026-06-03T00:00:00.000Z", "updatedAt": "2026-06-03T00:00:00.000Z"
+      }
+    ],
+    "mealEpisodes": [
+      {
+        "id": 1, "localDate": "2026-06-04", "startedAt": "2026-06-04T03:00:00.000Z",
+        "prePhysicalHunger": 4, "preCraving": 2, "preBingeUrge": 0,
+        "amount": "normal", "proteinIncluded": true, "sweetsIncluded": false, "ultraProcessedIncluded": true,
+        "perceivedOvereating": false, "alcoholAmount": null,
+        "source": "manual", "schemaVersion": 1,
+        "createdAt": "2026-06-04T03:00:00.000Z", "updatedAt": "2026-06-04T03:00:00.000Z"
+      }
+    ],
+    "activityEpisodes": [],
+    "medicationProfiles": [],
+    "medicationDoses": [],
+    "healthExceptions": [],
+    "screenMetrics": [],
+    "weightMeasurements": [],
+    "experiments": []
+  }
+}

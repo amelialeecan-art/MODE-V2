@@ -49,7 +49,9 @@ export function SettingsScreen() {
     const report = await importLegacyExport(repos, legacy)
     bump()
     const c = report.counts
-    setMsg(`구 MODE 데이터 가져오기 완료 — 상태 ${c.state} · 수면 ${c.sleep} · 생리 ${c.cycle} · 맥락 ${c.context} · 한 일 ${c.recovery} (계산 결과는 버림)`)
+    const skipped = report.skippedByV2Conflict.state + report.skippedByV2Conflict.sleep + report.skippedByV2Conflict.cycle
+    const conflictNote = skipped > 0 ? ` · 같은 날 직접입력 우선으로 ${skipped}건 건너뜀` : ''
+    setMsg(`구 MODE 데이터 가져오기 완료 — 상태 ${c.state} · 수면 ${c.sleep} · 식사 ${c.meal} · 생리 ${c.cycle} · 맥락 ${c.context} · 한 일 ${c.recovery} (계산 결과는 버림${conflictNote})`)
     e.target.value = ''
   }
 
