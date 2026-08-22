@@ -223,6 +223,28 @@ src/
 - 상관/인과: "X 가 Y 를 만들었다" 금지. 기본 문구 "X 가 있던 날 Y 가 평소보다 높았음 / 함께 나타나는 경향".
   timestamp 있을 때만 순서 사용. legacy(날짜만) 은 전후관계 안 만듦.
 
+## 5.1 측정 provenance 코호트 (분석)
+
+legacy 변환값과 신규 직접측정값은 숫자 범위가 같아도 **측정 방법이 다르다**. 분석은 이를 구분한다
+(판별은 `analysis/provenance/measurementCohort.ts` 한 곳에 중앙화 — 화면마다 재구현 금지).
+
+- **A. direct-compatible legacy** — 기존/신규 질문 의미가 동일한 필드→필드 변환:
+  `moodLow · anxiety · irritability · energy · focus · impulsivity · bingeUrge · bloating`.
+  신규 직접측정과 **같은 코호트**로 사용.
+- **B. derived legacy approximation** — 다른 legacy 변수에서 공식(max)으로 생성:
+  `craving · fatigueHeaviness · painDiscomfort`. **현재 통계 코호트로 취급하지 않는다.**
+- **C. incompatible** — 애초에 migration 안 함(`physicalHunger · positiveAffect`).
+
+런타임 판별은 하드코딩 목록이 아니라 record 의 `conversionRules[metric]` provenance 로 한다
+(B = `source==='legacy_import'` 이고 해당 metric 에 conversionRules 존재).
+
+규칙:
+1. **현재 통계(baseline · delta · association · temporal)는 direct 측정만 사용.** B(파생)는 제외.
+2. B 는 **raw history/그래프(Rhythm)** 에는 그대로 남는다(`dailyMetricValues` 는 provenance 무관).
+3. direct 측정이 metric 별 **7일(`DIRECT_COHORT_MIN_DAYS`) 미만**이면 B 를 "과거 참고값" 으로 별도 취급 가능(`metricCohort.sufficientDirect`).
+4. direct 가 7일 이상이면 현재 분석은 direct-only.
+5. **derived legacy 와 direct 를 하나의 연속 측정계열로 통계 처리하지 않는다.** (temporal 은 legacy 를 시각 신뢰 불가로 이미 전량 제외.)
+
 ## 6. 핵심 invariant (자동 테스트)
 
 1. `0 !== missing !== unknown` — RatingValue 인코딩/분석에서 삼분 유지

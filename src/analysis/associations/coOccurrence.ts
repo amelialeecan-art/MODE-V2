@@ -7,8 +7,13 @@ import type { CoreMetric } from '@/domain/state/coreState'
 import type { StateMeasurement } from '@/domain/state/stateMeasurement'
 import { isNumericRating } from '@/domain/common/types'
 import { mean, cohensD, effectSizeBand, round1 } from '@/shared/statistics/stats'
+import { directSamplesFor } from '@/analysis/provenance/measurementCohort'
 
-/** 날짜별 대표 metric 값(그 날 측정 평균). */
+/**
+ * 날짜별 대표 metric 값(그 날 측정 평균). provenance 무관 — **raw history 열람용**.
+ * Rhythm 그래프가 이 함수를 쓰므로 derived legacy 값도 사라지지 않는다.
+ * 통계(association 등)는 directSamplesFor 로 걸러 direct-only 로 계산한다.
+ */
 export function dailyMetricValues(measurements: StateMeasurement[], metric: CoreMetric): Map<string, number> {
   const byDate = new Map<string, number[]>()
   for (const m of measurements) {
@@ -43,7 +48,8 @@ export function coOccurrence(
   metric: CoreMetric,
   exposureDates: Set<string>,
 ): CoOccurrenceResult | null {
-  const daily = dailyMetricValues(measurements, metric)
+  // 통계 코호트는 직접측정만 — 파생 근사값은 association 에 넣지 않는다.
+  const daily = dailyMetricValues(directSamplesFor(measurements, metric), metric)
   const present: number[] = []
   const absent: number[] = []
   for (const [date, val] of daily) {
