@@ -2,10 +2,20 @@
 <html lang="ko">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, maximum-scale=1" />
-    <meta name="theme-color" content="#171719" />
     <title>MODE</title>
+    <meta name="description" content="내 상태를 원자료로 기록하는 개인 시계열 앱" />
+    <meta name="theme-color" content="#171719" />
+
+    <!-- 아이콘: iOS 홈 화면은 apple-touch-icon(불투명 PNG)만 사용한다. manifest/SVG 아님. -->
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+
+    <!-- iOS Safari '홈 화면에 추가 → 웹 앱으로 열기' standalone 설정 -->
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+    <meta name="apple-mobile-web-app-title" content="MODE" />
   </head>
   <body>
     <div id="root"></div>
