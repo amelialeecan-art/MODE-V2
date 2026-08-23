@@ -6,8 +6,11 @@ dist-ssr
 .vite
 coverage
 
-# 실제 개인 데이터 export 는 절대 커밋하지 않는다 (테스트 fixture 는 합성 sampleExport.json 만).
+# 실제 개인 데이터 export/변환 결과는 절대 커밋하지 않는다 (테스트 fixture 는 합성 JSON 만).
 mode-export*.json
+mode-backup*.json
+mode-v2-migrated.json
+mode-v2-clean-backup.json
 **/legacyExport*.json
 *.private.json
 *-real.json

@@ -12,7 +12,8 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "lint": "eslint .",
-    "migrate:legacy": "tsx scripts/migrateLegacyExport.ts"
+    "migrate:legacy": "tsx scripts/migrateLegacyExport.ts",
+    "export:clean": "tsx scripts/exportCleanBackup.ts"
   },
   "dependencies": {
     "dexie": "^4.0.10",
