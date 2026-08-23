@@ -2,7 +2,7 @@ import type { ISODate, ISODateTime, Provenance, RatingValue, TimeProvenance } fr
 
 /**
  * 수면 episode. timestamp 3개(옵션) 로 파생 계산.
- * timestamp 가 없으면(legacy) durationMinutes 만 신뢰 — 시각을 만들어내지 않는다.
+ * timestamp 가 없으면 durationMinutes 만 신뢰 — 시각을 만들어내지 않는다.
  */
 export interface SleepEpisode extends Provenance, TimeProvenance {
   id?: number
@@ -12,7 +12,7 @@ export interface SleepEpisode extends Provenance, TimeProvenance {
   wakeAt?: ISODateTime | null
   awakenings?: number | null
   satisfaction?: RatingValue
-  /** timestamp 가 없을 때(legacy)만 사용하는 fallback 총 수면시간(분). */
+  /** timestamp 가 없을 때만 쓰는 fallback 총 수면시간(분). */
   durationMinutes?: number | null
 }
 

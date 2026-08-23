@@ -8,7 +8,6 @@ import type { RatingValue } from '@/domain/common/types'
 import type { StateMeasurement } from '@/domain/state/stateMeasurement'
 import { isNumericRating } from '@/domain/common/types'
 import { mean, stdev, round1 } from '@/shared/statistics/stats'
-import { directSamplesFor } from '@/analysis/provenance/measurementCohort'
 
 export interface MetricBaseline {
   metric: CoreMetric
@@ -27,13 +26,9 @@ export function numericSamples(measurements: StateMeasurement[], metric: CoreMet
   return out
 }
 
-/**
- * personal baseline — 현재 통계 코호트는 **직접 측정만** 사용한다.
- * legacy 파생 근사값(B: craving/fatigueHeaviness/painDiscomfort 의 max 변환)은
- * 직접측정과 하나의 측정계열로 섞지 않는다(§분석 규칙 5).
- */
+/** personal baseline — metric 의 실제 수치 표본으로 평균/표준편차. */
 export function metricBaseline(measurements: StateMeasurement[], metric: CoreMetric): MetricBaseline | null {
-  const xs = numericSamples(directSamplesFor(measurements, metric), metric)
+  const xs = numericSamples(measurements, metric)
   if (xs.length < 2) return null
   return { metric, mean: mean(xs), sd: stdev(xs), n: xs.length }
 }
@@ -57,8 +52,7 @@ export function deltaFromBaseline(
 ): MetricDelta | null {
   const base = metricBaseline(history, metric)
   if (!base) return null
-  // 최근값도 직접측정만 — 파생 근사값을 현재값으로 쓰지 않는다.
-  const recentXs = numericSamples(directSamplesFor(recent, metric), metric)
+  const recentXs = numericSamples(recent, metric)
   if (recentXs.length === 0) return null
   const value = mean(recentXs)
   return {

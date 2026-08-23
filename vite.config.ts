@@ -1,4 +1,5 @@
 import { defineConfig } from 'vite'
+import { configDefaults } from 'vitest/config'
 import react from '@vitejs/plugin-react'
 import { VitePWA } from 'vite-plugin-pwa'
 import { fileURLToPath, URL } from 'node:url'
@@ -57,6 +58,8 @@ export default defineConfig(({ command, isPreview }) => {
       globals: true,
       environment: 'node',
       setupFiles: ['./src/test/setup.ts'],
+      // 파킹된 V1→V2 one-time 스크립트는 프로덕션 test 대상이 아니다.
+      exclude: [...configDefaults.exclude, 'scripts/**'],
     },
   }
 })

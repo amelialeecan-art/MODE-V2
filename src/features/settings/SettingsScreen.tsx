@@ -2,8 +2,6 @@ import { useRef, useState } from 'react'
 import { Card, Segmented, Button } from '@/shared/ui/primitives'
 import { useData, useAsyncData } from '@/app/DataContext'
 import { exportBackup, importBackup, type BackupFile } from '@/data/importExport/backup'
-import { importLegacyExport } from '@/data/migrations/runMigration'
-import type { LegacyExport } from '@/data/migrations/legacyTypes'
 import type { ToneMode } from '@/domain/settings/settings'
 
 function downloadJson(name: string, data: unknown) {
@@ -20,7 +18,6 @@ export function SettingsScreen() {
   const { repos, settings, saveSettings, bump, version } = useData()
   const [msg, setMsg] = useState<string | null>(null)
   const backupRef = useRef<HTMLInputElement>(null)
-  const legacyRef = useRef<HTMLInputElement>(null)
 
   const { data: meta } = useAsyncData(() => repos.getMeta(), [repos, version])
 
@@ -39,19 +36,6 @@ export function SettingsScreen() {
     bump()
     const total = Object.values(r.imported).reduce((a, b) => a + b, 0)
     setMsg(`백업 복원 완료 — ${total}건`)
-    e.target.value = ''
-  }
-
-  async function onLegacyFile(e: React.ChangeEvent<HTMLInputElement>) {
-    const f = e.target.files?.[0]
-    if (!f) return
-    const legacy = JSON.parse(await f.text()) as LegacyExport
-    const report = await importLegacyExport(repos, legacy)
-    bump()
-    const c = report.counts
-    const skipped = report.skippedByV2Conflict.state + report.skippedByV2Conflict.sleep + report.skippedByV2Conflict.cycle
-    const conflictNote = skipped > 0 ? ` · 같은 날 직접입력 우선으로 ${skipped}건 건너뜀` : ''
-    setMsg(`구 MODE 데이터 가져오기 완료 — 상태 ${c.state} · 수면 ${c.sleep} · 식사 ${c.meal} · 생리 ${c.cycle} · 맥락 ${c.context} · 한 일 ${c.recovery} (계산 결과는 버림${conflictNote})`)
     e.target.value = ''
   }
 
@@ -103,15 +87,6 @@ export function SettingsScreen() {
             마지막 백업: {meta.lastBackupAt ? new Date(meta.lastBackupAt).toLocaleString('ko-KR') : '없음'} · schema v{meta.schemaVersion} · migration v{meta.migrationVersion}
           </p>
         )}
-      </Card>
-
-      <div className="section-label">구 MODE 데이터 가져오기</div>
-      <Card>
-        <p className="tiny muted" style={{ marginBottom: 10 }}>
-          예전 MODE의 export JSON을 한 번 변환해서 가져와. 계산된 점수·패턴은 버리고 원자료만 살려.
-        </p>
-        <Button block variant="ghost" onClick={() => legacyRef.current?.click()}>구 export 파일 선택</Button>
-        <input ref={legacyRef} type="file" accept="application/json" hidden onChange={onLegacyFile} />
       </Card>
 
       <div className="section-label">위험 구역</div>

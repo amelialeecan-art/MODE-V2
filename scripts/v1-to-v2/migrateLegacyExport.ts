@@ -4,8 +4,8 @@
    앱 UI 의 "데이터 가져오기" 와 동일한 migrateLegacyExport 를 사용한다.
    ===================================================================== */
 import { readFileSync, writeFileSync } from 'node:fs'
-import { migrateLegacyExport } from '../src/data/migrations/legacyImport.ts'
-import type { LegacyExport } from '../src/data/migrations/legacyTypes.ts'
+import { migrateLegacyExport } from './legacyImport.ts'
+import type { LegacyExport } from './legacyTypes.ts'
 
 const inPath = process.argv[2]
 const outPath = process.argv[3] ?? 'mode-v2-migrated.json'

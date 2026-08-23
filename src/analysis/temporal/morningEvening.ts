@@ -1,7 +1,5 @@
 /* =====================================================================
    아침 → 저녁 변화(paired). 같은 날 morning/evening 이 모두 있을 때만.
-   - legacy_import 는 시각 신뢰 불가 → paired 분석에서 제외(날짜 단위 취급).
-   - 시각(recordedAt)이 있는 manual/import 기록만 사용.
    ===================================================================== */
 import type { CoreMetric } from '@/domain/state/coreState'
 import type { StateMeasurement } from '@/domain/state/stateMeasurement'
@@ -15,15 +13,9 @@ export interface DayPair {
   change: number // evening - morning
 }
 
-/** legacy_import 제외한, 시각 신뢰 가능한 측정만. */
-function trustworthyTimed(measurements: StateMeasurement[]): StateMeasurement[] {
-  return measurements.filter((m) => m.source !== 'legacy_import')
-}
-
 export function morningEveningPairs(measurements: StateMeasurement[], metric: CoreMetric): DayPair[] {
-  const timed = trustworthyTimed(measurements)
   const byDate = new Map<string, { morning?: number; evening?: number }>()
-  for (const m of timed) {
+  for (const m of measurements) {
     if (m.checkInType === 'adhoc') continue
     const v = m.metrics[metric]
     if (!isNumericRating(v)) continue

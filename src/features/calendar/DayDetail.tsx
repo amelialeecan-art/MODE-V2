@@ -27,7 +27,6 @@ export function DayDetail({ date }: { date: string }) {
   const { day } = data
   const summary = summarizeDay(day)
   const anyRecord = day.state.length || day.sleep.length || day.meals.length || day.cycle.length || day.context.length || day.recovery.length
-  const isLegacy = [...day.state, ...day.sleep, ...day.cycle].some((r) => r.source === 'legacy_import')
 
   if (!anyRecord) return <p className="muted">{formatLocalDate(date)} — 기록 없음</p>
 
@@ -35,7 +34,6 @@ export function DayDetail({ date }: { date: string }) {
     <div>
       <div className="row-between">
         <b>{formatLocalDate(date)}</b>
-        {isLegacy && <span className="pill pill--legacy">과거 가져온 기록</span>}
       </div>
 
       {/* 1) RAW 기록 */}
