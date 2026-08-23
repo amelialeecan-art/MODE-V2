@@ -6,7 +6,8 @@ import { dailyMetricValues } from '@/analysis/associations/coOccurrence'
 import { CORE_METRICS, CORE_STATE_META, type CoreMetric } from '@/domain/state/coreState'
 import { addDays, daysBetween, todayLocalDate, formatLocalDate } from '@/shared/time/time'
 
-const SERIES_COLORS = ['#c8663c', '#4c8c6b', '#6a6ab0', '#b58b4c']
+// V1 파스텔 팔레트(라벤더·코랄·민트·스카이)
+const SERIES_COLORS = ['#a985e8', '#ff9576', '#5bc79e', '#74a8ec']
 const DEFAULT_METRICS: CoreMetric[] = ['craving', 'energy', 'anxiety']
 
 export function RhythmScreen() {
@@ -83,12 +84,12 @@ export function RhythmScreen() {
             ))}
             {/* 생리 시작 세로선 */}
             {[...periodStarts].map((d) => (
-              <line key={d} x1={xOf(d)} x2={xOf(d)} y1={PAD.t} y2={H - PAD.b} stroke="#b5556f" strokeDasharray="3 3" opacity={0.6} />
+              <line key={d} x1={xOf(d)} x2={xOf(d)} y1={PAD.t} y2={H - PAD.b} stroke="#e58bbe" strokeDasharray="3 3" opacity={0.6} />
             ))}
             {/* 수면시간 바(하단, 0~600분 정규화) */}
             {[...sleepByDate].map(([d, mins]) => {
               const h = Math.min(1, mins / 600) * 22
-              return <rect key={d} x={xOf(d) - 2} y={H - PAD.b - h} width={4} height={h} fill="#6a8caf" opacity={0.35} />
+              return <rect key={d} x={xOf(d) - 2} y={H - PAD.b - h} width={4} height={h} fill="#74a8ec" opacity={0.35} />
             })}
             {/* 지표 라인 */}
             {series.map((s) => {
@@ -107,8 +108,8 @@ export function RhythmScreen() {
           {series.map((s) => (
             <span key={s.metric}><i style={{ background: s.color }} />{CORE_STATE_META[s.metric].label}</span>
           ))}
-          {periodStarts.size > 0 && <span><i style={{ background: '#b5556f' }} />생리 시작</span>}
-          {sleepByDate.size > 0 && <span><i style={{ background: '#6a8caf', height: 8 }} />수면시간</span>}
+          {periodStarts.size > 0 && <span><i style={{ background: '#e58bbe' }} />생리 시작</span>}
+          {sleepByDate.size > 0 && <span><i style={{ background: '#74a8ec', height: 8 }} />수면시간</span>}
         </div>
         <p className="tiny dim" style={{ marginTop: 6 }}>{formatLocalDate(from)} ~ {formatLocalDate(to)} · 측정한 날만 점으로 표시</p>
       </Card>

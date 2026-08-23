@@ -1,5 +1,6 @@
 import { useNavigate } from 'react-router-dom'
 import { Card, Button, EmptyState } from '@/shared/ui/primitives'
+import { Mascot } from '@/shared/ui/mascot/Mascot'
 import { useData, useAsyncData } from '@/app/DataContext'
 import { loadDayRecords, loadRange } from '@/data/queries/dayQuery'
 import { summarizeDay, compareToBaseline } from '@/analysis/day/daySummary'
@@ -33,12 +34,20 @@ export function TodayScreen() {
 
   return (
     <div className="screen">
-      <h1 className="screen__title">◐ 오늘</h1>
-      <p className="screen__subtitle">{formatLocalDate(today)}</p>
+      <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+        <Mascot mood={summary.hasAnyState ? 'happy' : 'calm'} size={52} />
+        <div>
+          <h1 className="screen__title">오늘</h1>
+          <p className="screen__subtitle">{formatLocalDate(today)}</p>
+        </div>
+      </div>
 
       {!summary.hasAnyState ? (
         <Card>
           <EmptyState>
+            <div style={{ display: 'flex', justifyContent: 'center', marginBottom: 12 }}>
+              <Mascot mood="sleepy" size={72} />
+            </div>
             <p>{noDataToday(tone)}</p>
             <div style={{ marginTop: 14 }}>
               <Button variant="primary" onClick={() => nav('/log/state')}>상태 남기기</Button>
