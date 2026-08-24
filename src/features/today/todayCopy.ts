@@ -5,6 +5,15 @@ import type { DayMetricValue, Level } from '@/analysis/day/daySummary'
 
 const LEVEL_RANK: Record<Level, number> = { none: 0, low: 1, mid: 2, high: 3, veryHigh: 4 }
 
+/** 마지막 글자에 받침이 있는지(한글만). 조사 이/가·은/는 선택에 사용. */
+function hasBatchim(word: string): boolean {
+  const c = word.charCodeAt(word.length - 1)
+  if (c < 0xac00 || c > 0xd7a3) return false
+  return (c - 0xac00) % 28 !== 0
+}
+const withIGa = (w: string) => `${w}${hasBatchim(w) ? '이' : '가'}`
+const withEunNeun = (w: string) => `${w}${hasBatchim(w) ? '은' : '는'}`
+
 /** 한 metric 을 자연스러운 구절로. valence 로 좋음/부담 어감 반영. */
 function phraseFor(m: DayMetricValue, tone: Tone): string | null {
   if (m.level == null) return null
@@ -14,13 +23,13 @@ function phraseFor(m: DayMetricValue, tone: Tone): string | null {
   const weak = m.level === 'none' || m.level === 'low'
 
   if (meta.valence === 'capacity' || meta.valence === 'positive') {
-    if (strong) return tone.say(`${name}는 높은 편이야`, `${name}는 높은 편이에요`)
-    if (weak) return tone.say(`${name}는 낮은 편이야`, `${name}는 낮은 편이에요`)
+    if (strong) return tone.say(`${withEunNeun(name)} 높은 편이야`, `${withEunNeun(name)} 높은 편이에요`)
+    if (weak) return tone.say(`${withEunNeun(name)} 낮은 편이야`, `${withEunNeun(name)} 낮은 편이에요`)
     return null
   }
   // symptom
-  if (strong) return tone.say(`${name}가 꽤 있었어`, `${name}가 꽤 있었어요`)
-  if (weak) return tone.say(`${name}는 낮은 편이야`, `${name}는 낮은 편이에요`)
+  if (strong) return tone.say(`${withIGa(name)} 꽤 있었어`, `${withIGa(name)} 꽤 있었어요`)
+  if (weak) return tone.say(`${withEunNeun(name)} 낮은 편이야`, `${withEunNeun(name)} 낮은 편이에요`)
   return null
 }
 

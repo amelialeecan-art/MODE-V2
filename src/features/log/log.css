@@ -1,0 +1,29 @@
+/* =====================================================================
+   기록(Log) 메뉴 — V1 프레젠테이션 언어(screen-head + glass row).
+   ===================================================================== */
+.log-menu { display: flex; flex-direction: column; gap: 11px; margin-top: 16px; }
+
+.log-menu__item {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 13px;
+  text-align: left;
+  cursor: pointer;
+}
+.log-menu__icon {
+  flex: 0 0 auto;
+  width: 44px;
+  height: 44px;
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 21px;
+  background: rgba(169, 133, 232, 0.14);
+  color: var(--lav-ink);
+}
+.log-menu__body { flex: 1 1 auto; }
+.log-menu__title { display: block; font-size: 15.5px; font-weight: 700; color: var(--ink); letter-spacing: -0.01em; }
+.log-menu__desc { display: block; font-size: 12.5px; color: var(--ink-2); font-weight: 500; margin-top: 2px; }
+.log-menu__chev { flex: 0 0 auto; color: var(--ink-3); font-size: 20px; font-weight: 700; }

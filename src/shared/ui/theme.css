@@ -7,6 +7,9 @@
    담는다. 클래스 이름·정보구조는 V2 그대로(=기능/인터랙션 불변).
    ===================================================================== */
 
+/* button 기본 리셋 — 명시 스타일이 없는 버튼이 UA 테두리를 그리지 않도록. */
+button { border: none; background: none; cursor: pointer; color: inherit; }
+
 /* 셸 본문(app-shell__body)이 페이지 여백을 갖는다 → screen 은 여백 0. */
 .screen { padding: 0; animation: fade .3s cubic-bezier(.22,1,.36,1); }
 @keyframes fade { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }

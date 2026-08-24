@@ -43,12 +43,12 @@ export interface CoreStateMeta {
 /** 표시 순서 = CORE_METRICS 순서. */
 export const CORE_STATE_META: Record<CoreMetric, CoreStateMeta> = {
   moodLow: { metric: 'moodLow', label: '기분 저하', lowLabel: '없음', highLabel: '매우 심함', valence: 'symptom' },
-  positiveAffect: { metric: 'positiveAffect', label: '긍정 정서', lowLabel: '거의 없음', highLabel: '매우 좋음', valence: 'positive' },
+  positiveAffect: { metric: 'positiveAffect', label: '기분 좋음', lowLabel: '거의 없음', highLabel: '매우 좋음', valence: 'positive' },
   anxiety: { metric: 'anxiety', label: '불안', lowLabel: '없음', highLabel: '매우 심함', valence: 'symptom' },
   irritability: { metric: 'irritability', label: '짜증', lowLabel: '없음', highLabel: '매우 심함', valence: 'symptom' },
   energy: { metric: 'energy', label: '에너지', lowLabel: '매우 낮음', highLabel: '매우 높음', valence: 'capacity' },
   focus: { metric: 'focus', label: '집중', lowLabel: '매우 낮음', highLabel: '매우 높음', valence: 'capacity' },
-  impulsivity: { metric: 'impulsivity', label: '충동성', lowLabel: '없음', highLabel: '매우 강함', valence: 'symptom' },
+  impulsivity: { metric: 'impulsivity', label: '충동적임', lowLabel: '없음', highLabel: '매우 강함', valence: 'symptom' },
   physicalHunger: { metric: 'physicalHunger', label: '배고픔', lowLabel: '없음', highLabel: '매우 강함', valence: 'symptom' },
   craving: { metric: 'craving', label: '음식 당김', lowLabel: '없음', highLabel: '매우 강함', valence: 'symptom' },
   bingeUrge: { metric: 'bingeUrge', label: '폭식 충동', lowLabel: '없음', highLabel: '매우 강함', valence: 'symptom' },
