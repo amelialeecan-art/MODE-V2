@@ -6,13 +6,12 @@
 ## 고정 production URL
 
 ```
-https://amelialeecan-art.github.io/MODE-V.2./
+https://amelialeecan-art.github.io/MODE-V2/
 ```
 
-- Vite `base` = `/MODE-V.2./` (현재 repository 이름 기준). manifest `id`/`start_url`/`scope` 도 동일.
+- Vite `base` = `/MODE-V2/` (현재 repository 이름 `amelialeecan-art/MODE-V2` 기준). manifest `id`/`start_url`/`scope`, workbox `navigateFallback`, 아이콘 경로 모두 이 base 에서 파생된다.
 - 이 origin/path 가 앞으로 고정 → 재배포해도 IndexedDB 유지.
-- ⚠️ repo 이름 끝에 점(`.`)이 있어 URL이 `MODE-V.2./` 로 끝난다. 동작하지만 지저분하면
-  repo 를 `MODE-V2` 로 rename 하고 `vite.config.ts` 의 `REPO_BASE` 한 줄만 `'/MODE-V2/'` 로 바꾸면 된다.
+- repo 이름을 바꾸면 `vite.config.ts` 의 `REPO_BASE` 한 줄만 `'/<새이름>/'` 로 바꾸면 된다.
 
 ## 한 번만 하면 되는 것 (사용자 직접)
 
