@@ -1,0 +1,50 @@
+/* =====================================================================
+   리듬 — V1 rhythm/charts.css 의 셀렉터·탭·밴드 스타일 포팅 +
+   V2용 2-lane 차트(상태 0~10 / 수면 시간) 스타일.
+   V1 synthetic score(load/dayType) 는 복원하지 않는다.
+   ===================================================================== */
+
+/* 기간 탭 */
+.rhythm-tabs { display: flex; gap: 6px; margin: 4px 0 12px; }
+.rhythm-tab {
+  flex: 1; padding: 9px 0; border-radius: 12px;
+  border: 1.4px solid var(--line); background: rgba(255, 255, 255, 0.4);
+  font-size: 13px; font-weight: 700; color: var(--ink-2); cursor: pointer;
+}
+.rhythm-tab--on { border-color: var(--lav-2); background: rgba(169, 133, 232, 0.14); color: var(--lav-ink); }
+
+/* 지표 셀렉터 */
+.rhythm-pick-label { font-size: 12.5px; font-weight: 700; color: var(--ink-2); margin: 4px 2px 8px; }
+.rhythm-metrics { display: flex; flex-wrap: wrap; gap: 7px; margin-bottom: 10px; }
+.rhythm-metric {
+  display: inline-flex; align-items: center; gap: 6px; padding: 7px 12px;
+  border-radius: var(--pill); border: 1.4px solid var(--line);
+  background: rgba(255, 255, 255, 0.4); font-size: 13px; font-weight: 700;
+  color: var(--ink-3); cursor: pointer;
+}
+.rhythm-metric--on { background: rgba(255, 255, 255, 0.78); }
+.rhythm-metric__dot { width: 9px; height: 9px; border-radius: 50%; flex: none; }
+.rhythm-allmetrics-toggle {
+  font-size: 12.5px; font-weight: 700; color: var(--lav-ink);
+  background: rgba(169, 133, 232, 0.1); border: 1.4px dashed var(--lav-2);
+  border-radius: var(--pill); padding: 7px 14px; cursor: pointer; margin-bottom: 10px;
+}
+.rhythm-pick-hint { font-size: 11.5px; color: var(--ink-3); font-weight: 600; margin: -2px 2px 10px; }
+
+/* 차트 */
+.rhythm-wrap { position: relative; width: 100%; }
+.rhythm { width: 100%; height: auto; display: block; }
+.rhythm-x-t { font-size: 8.5px; font-weight: 700; fill: var(--ink-3); }
+.rhythm-y-t { font-size: 8.5px; font-weight: 700; fill: var(--ink-3); }
+.rhythm-lane-t { font-size: 9.5px; font-weight: 800; fill: var(--ink-2); }
+
+/* 범례 (선택 지표 + 수면 + 생리 밴드) */
+.rhythm-legend { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 10px; }
+.rhythm-legend span { display: inline-flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 600; color: var(--ink-2); }
+.rhythm-legend i { width: 14px; height: 3px; border-radius: 3px; display: inline-block; }
+.rhythm-legend i.dot { width: 9px; height: 9px; border-radius: 50%; }
+.rhythm-legend i.band { width: 13px; height: 13px; border-radius: 3px; background: rgba(229, 139, 190, 0.32); }
+.rhythm-legend i.bar { width: 6px; height: 12px; border-radius: 2px; background: var(--sky); }
+
+.rhythm-range-note { font-size: 11.5px; color: var(--ink-3); font-weight: 600; margin-top: 8px; }
+.rhythm-empty { font-size: 13.5px; color: var(--ink-2); font-weight: 500; line-height: 1.55; text-align: center; padding: 10px 0; }
