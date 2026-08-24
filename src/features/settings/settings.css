@@ -1,0 +1,24 @@
+/* =====================================================================
+   설정 — V1 settings.css 시각 언어 포팅(필요한 부분만).
+   ===================================================================== */
+.settings-head { display: flex; align-items: center; gap: 6px; }
+.settings-back { width: 34px; height: 34px; background: transparent; font-size: 26px; line-height: 1; color: var(--deep-2); border-radius: 10px; }
+
+.setting-row { display: flex; align-items: center; justify-content: space-between; margin-top: 13px; padding: 2px 0; }
+.setting-row__label { font-size: 15px; font-weight: 600; color: var(--ink); }
+.setting-hint { font-size: 12.5px; color: var(--ink-2); font-weight: 500; line-height: 1.5; margin-top: 10px; }
+.setting-hint--soft { color: var(--ink-3); }
+
+/* 토글 스위치 */
+.toggle { width: 46px; height: 28px; border-radius: 999px; background: rgba(120,90,180,0.18); position: relative; transition: background var(--dur-fast) ease; flex: 0 0 auto; }
+.toggle--on { background: var(--mint); }
+.toggle__knob { position: absolute; top: 3px; left: 3px; width: 22px; height: 22px; border-radius: 50%; background: #fff; box-shadow: 0 2px 5px rgba(70,46,120,0.25); transition: transform var(--dur-fast) ease; }
+.toggle--on .toggle__knob { transform: translateX(18px); }
+
+/* 데이터 버튼 */
+.data-btn { width: 100%; margin-top: 13px; border: 1.6px solid var(--lav-2); background: rgba(169,133,232,0.1); color: var(--lav-ink); font-weight: 700; font-size: 14px; padding: 13px; border-radius: 14px; }
+.data-btn--primary { border: none; color: #fff; background: linear-gradient(120deg, var(--deep), #6a4fb6 70%, #8a5bc0); box-shadow: var(--sh-btn); }
+
+.settings-msg { margin-top: 12px; font-size: 13px; font-weight: 600; color: var(--deep-2); }
+.settings-foot { text-align: center; font-size: 12px; color: var(--ink-3); font-weight: 600; margin-top: 22px; }
+.import-file-input { display: none; }
