@@ -1,6 +1,7 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
 import { App } from '@/app/App'
+import '@/design/global.css'
 import '@/shared/ui/theme.css'
 
 // 장기 기록이 핵심인 앱 — 브라우저에 "이 IndexedDB 를 함부로 비우지 말라"고 요청(best-effort).
