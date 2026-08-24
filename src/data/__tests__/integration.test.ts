@@ -62,6 +62,39 @@ describe('단일 소스: 입력 → Today/Calendar/Rhythm/Analysis 동일 raw', 
     expect(dailyMetricValues(range.state, 'energy').get(today)).toBe(8) // Rhythm/Analysis
   })
 
+  it('신규 raw 1건: Log → Today → Rhythm → Calendar → Analysis 가 같은 값을 읽는다', async () => {
+    const today = todayLocalDate()
+    // Log 경로(upsertCheckIn) 로 저장. 0/미측정/unknown 삼분 포함.
+    await repos.state.upsertCheckIn({
+      source: 'manual', localDate: today, timezoneOffsetMinutes: 540,
+      recordedAt: nowISO(), checkInType: 'evening',
+      promptedMetrics: ['energy', 'anxiety', 'irritability'], // physicalHunger 는 안 물어봄
+      metrics: { energy: 8, anxiety: 0, irritability: 'unknown' },
+    })
+
+    // Today: 대표 상태값
+    const day = await loadDayRecords(repos, today)
+    const picked = pickDayState(day)
+    expect(picked.find((p) => p.metric === 'energy')?.value).toBe(8)
+    expect(picked.find((p) => p.metric === 'anxiety')?.value).toBe(0) // 실제 0
+    expect(picked.find((p) => p.metric === 'irritability')?.value).toBe('unknown')
+    expect(picked.find((p) => p.metric === 'physicalHunger')).toBeUndefined() // 안 물어봄
+
+    // Calendar: 존재 표시 + 원본
+    const presence = await loadRecordDates(repos, today, today)
+    expect(presence.get(today)?.eveningState).toBe(true)
+    expect(summarizeDay(day).metrics.find((m) => m.metric === 'energy')?.value).toBe(8)
+
+    // Rhythm & Analysis: 같은 range.state 를 읽는다
+    const range = await loadRange(repos, today, today)
+    expect(dailyMetricValues(range.state, 'energy').get(today)).toBe(8)
+    expect(dailyMetricValues(range.state, 'anxiety').get(today)).toBe(0) // 0 은 값
+    expect(dailyMetricValues(range.state, 'irritability').has(today)).toBe(false) // unknown 제외
+    expect(dailyMetricValues(range.state, 'physicalHunger').has(today)).toBe(false) // missing 제외
+    const report = buildAnalysisReport(range, today)
+    expect(report.totalStateDays).toBe(1) // Analysis 도 같은 raw 1건을 센다
+  })
+
   it('0 / missing / unknown 의 의미가 모든 read 경로에서 유지된다', async () => {
     const today = todayLocalDate()
     await repos.state.upsertCheckIn({

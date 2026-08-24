@@ -90,7 +90,7 @@ export function SettingsScreen() {
       <GlassCard tint="mint">
         <SectionHeader title="데이터" subtitle="내 기록 관리 · 이 기기에만 저장돼" />
         <p className="setting-hint" style={{ marginTop: 2 }}>오래 쌓인 원자료가 가치야. 그 파일만으로 완전히 복원돼. 서버로 보내지 않아.</p>
-        <button className="data-btn data-btn--primary" onClick={doExport}>JSON 내보내기</button>
+        <button className="data-btn" onClick={doExport}>JSON 내보내기</button>
         <button className="data-btn" onClick={() => backupRef.current?.click()}>JSON 불러오기 (전체 교체)</button>
         <input ref={backupRef} type="file" accept="application/json,.json" className="import-file-input" onChange={onBackupFile} />
         <p className="setting-hint setting-hint--soft">마지막 백업: {lastBackup}</p>
