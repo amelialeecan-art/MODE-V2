@@ -1,0 +1,87 @@
+/* =====================================================================
+   캘린더 — V1 calendar/heatmap.css 시각(월 네비/그리드/바텀시트) 포팅 +
+   V2 정보 정리: 색점 5개 대신 (기록 있음 indicator 1개 + 실제 생리 pink band).
+   ===================================================================== */
+
+/* 월 헤더 / 네비 */
+.calhead { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 2px 4px 12px; }
+.calnav { display: flex; align-items: center; gap: 8px; }
+.calnav__btn { width: 32px; height: 32px; border-radius: 10px; background: rgba(255,255,255,0.6); color: var(--deep-2); font-size: 20px; line-height: 1; }
+.calnav__btn:disabled { opacity: 0.35; cursor: default; }
+.calhead__m { font-size: 20px; font-weight: 700; letter-spacing: -0.02em; min-width: 118px; text-align: center; }
+.caltoday { border: 1.4px solid var(--lav-2); background: rgba(169,133,232,0.12); color: var(--lav-ink); font-size: 12px; font-weight: 700; padding: 6px 12px; border-radius: var(--pill); }
+
+/* 그리드 카드 */
+.calcard {
+  border-radius: var(--r-card); padding: 15px 13px 17px; margin-top: 4px;
+  background: rgba(255,255,255,0.62); backdrop-filter: blur(13px) saturate(1.25); -webkit-backdrop-filter: blur(13px) saturate(1.25);
+  border: 1px solid rgba(255,255,255,0.72); box-shadow: var(--sh-card);
+}
+.dow { display: grid; grid-template-columns: repeat(7,1fr); margin-bottom: 7px; }
+.dow span { text-align: center; font-size: 11px; font-weight: 600; color: var(--ink-3); }
+.dow__sun { color: var(--coral); }
+.grid { display: grid; grid-template-columns: repeat(7,1fr); gap: 5px; }
+.cell {
+  position: relative; aspect-ratio: 1 / 1.12; border-radius: 12px;
+  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px;
+  background: rgba(255,255,255,0.4); padding: 0;
+}
+.cell--pad { background: transparent; cursor: default; }
+.cell--empty { background: rgba(255,255,255,0.25); }
+.cell--empty .cell__n { color: var(--ink-3); opacity: 0.55; }
+.cell--period { background: rgba(229,139,190,0.22); box-shadow: inset 0 0 0 1px rgba(229,139,190,0.4); }
+.cell__n { font-size: 12.5px; font-weight: 700; font-variant-numeric: tabular-nums; line-height: 1; color: var(--ink); }
+.cell--period .cell__n { color: var(--rose-ink); }
+.cell__mark { width: 5px; height: 5px; border-radius: 50%; background: var(--lav); }
+.cell--period .cell__mark { background: var(--rose-ink); }
+.cell--today { box-shadow: inset 0 0 0 2.5px var(--deep); }
+.cell--sel { box-shadow: inset 0 0 0 2px var(--lav-ink); }
+.cell--period.cell--today { box-shadow: inset 0 0 0 2.5px var(--deep); }
+
+.callegend { display: flex; gap: 16px; margin-top: 12px; padding: 0 2px; }
+.callegend span { display: inline-flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 600; color: var(--ink-2); }
+.callegend i.dot { width: 7px; height: 7px; border-radius: 50%; background: var(--lav); }
+.callegend i.band { width: 14px; height: 14px; border-radius: 4px; background: rgba(229,139,190,0.32); box-shadow: inset 0 0 0 1px rgba(229,139,190,0.4); }
+
+/* ---------- 바텀 시트 ---------- */
+.sheet-scrim { position: fixed; inset: 0; background: rgba(53,43,76,0.28); z-index: var(--z-sheet); }
+.sheet {
+  position: fixed; left: 50%; bottom: 0; transform: translateX(-50%);
+  width: 100%; max-width: 480px; max-height: 86vh; overflow-y: auto; z-index: calc(var(--z-sheet) + 1);
+  background: var(--paper); border-radius: 26px 26px 0 0;
+  padding: 12px 22px calc(26px + env(safe-area-inset-bottom)); box-shadow: 0 -14px 40px rgba(70,46,120,0.18);
+}
+.sheet__handle { width: 44px; height: 5px; border-radius: 5px; background: rgba(53,43,76,0.2); margin: 0 auto 14px; }
+.sheet__date { font-size: 20px; font-weight: 700; color: var(--ink); }
+.sheet__date small { font-size: 13px; font-weight: 600; color: var(--ink-3); margin-left: 6px; }
+.sheet__hint { font-size: 13.5px; color: var(--ink-2); font-weight: 500; margin-top: 10px; line-height: 1.5; }
+
+/* 이날 한눈에 */
+.glance { margin-top: 14px; display: flex; flex-direction: column; gap: 9px; }
+.glance__row { display: flex; align-items: baseline; justify-content: space-between; gap: 10px; }
+.glance__name { font-size: 15px; font-weight: 700; color: var(--ink); }
+.glance__val { font-size: 14px; font-weight: 600; color: var(--ink-2); font-variant-numeric: tabular-nums; }
+.glance__delta { font-weight: 700; }
+.glance__cycle { font-size: 15px; font-weight: 700; color: var(--rose-ink); background: rgba(229,139,190,0.14); border-radius: 12px; padding: 9px 12px; }
+
+/* 사실 섹션 */
+.sheet-section { margin-top: 18px; }
+.sheet-section__title { font-size: 12.5px; font-weight: 700; color: var(--ink-2); margin-bottom: 8px; }
+.sheet-fact { font-size: 13.5px; font-weight: 600; color: var(--ink); line-height: 1.5; }
+.sheet-fact + .sheet-fact { margin-top: 4px; }
+.sheet-chips { display: flex; flex-wrap: wrap; gap: 7px; }
+.sheet-chip { font-size: 13px; font-weight: 600; padding: 7px 12px; border-radius: var(--pill); background: rgba(120,90,180,0.1); color: var(--deep-2); }
+.sheet-chip--mint { background: rgba(91,199,158,0.16); color: var(--mint-ink); }
+.sheet-chip--rose { background: rgba(229,139,190,0.14); color: var(--rose-ink); }
+
+/* 전체 기록 보기 */
+.sheet-all { margin-top: 18px; }
+.sheet-all__sum { cursor: pointer; list-style: none; font-size: 12.5px; font-weight: 700; color: var(--ink-3); text-align: center; padding: 11px; border: 1.4px dashed rgba(120,120,140,0.35); border-radius: 14px; }
+.sheet-all__sum::-webkit-details-marker { display: none; }
+.sheet-all__block { margin-top: 12px; }
+.sheet-all__ci { font-size: 12px; font-weight: 700; color: var(--ink-2); margin: 10px 0 4px; }
+.sheet-all__row { display: flex; align-items: center; justify-content: space-between; padding: 3px 0; font-size: 13px; }
+.sheet-all__row span { color: var(--ink-2); }
+
+.sheet__closebtn { width: 100%; margin-top: 18px; border: 1.5px solid var(--line); background: rgba(255,255,255,0.6); color: var(--ink-2); font-weight: 700; font-size: 14px; padding: 13px; border-radius: 14px; }
+.sheet__record { margin-top: 16px; }

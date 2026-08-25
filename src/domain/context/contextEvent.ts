@@ -4,7 +4,7 @@ import type { ISODate, ISODateTime, Provenance, RatingValue, TimeProvenance } fr
 export type ContextCategory = 'work' | 'relationship' | 'control' | 'environment' | 'movement'
 
 /**
- * 스트레스/생활 사건. occurredAt 이 있으면 시각 사용, 없으면(legacy) 날짜 단위로만.
+ * 스트레스/생활 사건. occurredAt 이 있으면 시각 사용, 없으면 날짜 단위로만.
  * approxWindow='recent3days' 는 "정확한 날짜 불명" 표시 → 같은날 association 제외.
  */
 export interface ContextEvent extends Provenance, TimeProvenance {

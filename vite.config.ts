@@ -4,11 +4,11 @@ import { VitePWA } from 'vite-plugin-pwa'
 import { fileURLToPath, URL } from 'node:url'
 
 // ── GitHub Pages 프로젝트 페이지 배포 ────────────────────────────────
-// 현재 repository 이름이 그대로 경로가 된다: amelialeecan-art/MODE-V.2.
-//   → https://amelialeecan-art.github.io/MODE-V.2./
+// 현재 repository 이름이 그대로 경로가 된다: amelialeecan-art/MODE-V2
+//   → https://amelialeecan-art.github.io/MODE-V2/
 // repo 이름을 바꾸면 이 상수 하나만 고치면 된다(그 뒤 IndexedDB origin/path 고정).
 // dev 는 '/', build/preview 는 base 를 써서 SW scope/경로를 로컬에서도 검증.
-const REPO_BASE = '/MODE-V.2./'
+const REPO_BASE = '/MODE-V2/'
 
 export default defineConfig(({ command, isPreview }) => {
   const base = command === 'build' || isPreview ? REPO_BASE : '/'

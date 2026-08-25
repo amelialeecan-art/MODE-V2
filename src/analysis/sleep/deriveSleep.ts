@@ -7,7 +7,7 @@ export function deriveSleep(ep: SleepEpisode): SleepDerived {
   const sleepLatency = minutesBetween(ep.wentToBedAt, ep.sleepOnsetAt)
   let sleepDuration = minutesBetween(ep.sleepOnsetAt, ep.wakeAt)
   if (sleepDuration == null && typeof ep.durationMinutes === 'number') {
-    sleepDuration = ep.durationMinutes // legacy: 시각 없이 총 수면시간만
+    sleepDuration = ep.durationMinutes // 시각 없이 총 수면시간만 아는 경우
   }
   return { timeInBed, sleepLatency, sleepDuration }
 }

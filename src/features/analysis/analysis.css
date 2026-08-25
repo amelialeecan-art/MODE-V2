@@ -1,0 +1,27 @@
+/* =====================================================================
+   분석 — V1 analysis.css 시각 언어(카드/헤더/사실문장/칩)만 포팅.
+   분석 로직은 V2 그대로. V1 synthetic score/episode/cluster는 없음.
+   ===================================================================== */
+.ana-empty { font-size: 13.5px; color: var(--ink-2); font-weight: 500; line-height: 1.55; margin-top: 8px; }
+
+/* 요즘 뭐가 달라졌지 — metric delta 행 */
+.ana-row { display: flex; align-items: center; justify-content: space-between; padding: 8px 0; }
+.ana-row + .ana-row { border-top: 1px solid var(--line); }
+.ana-row__name { font-size: 15px; font-weight: 700; color: var(--ink); }
+.ana-row__delta { font-weight: 700; font-variant-numeric: tabular-nums; }
+
+.ana-me { padding-top: 10px; margin-top: 6px; border-top: 1px solid var(--line); }
+.ana-me__title { font-size: 12px; font-weight: 700; color: var(--ink-3); margin-bottom: 4px; }
+.ana-me__row { display: flex; align-items: center; justify-content: space-between; padding: 3px 0; font-size: 13px; }
+.ana-me__row span { color: var(--ink-2); }
+
+/* 무엇과 같이 나타났지 — association 문장 */
+.ana-say { font-size: 14.5px; font-weight: 600; color: var(--ink); line-height: 1.55; }
+.ana-say b { font-weight: 800; }
+.ana-meta { margin-top: 7px; font-size: 11.5px; font-weight: 600; color: var(--ink-3); line-height: 1.5; }
+
+/* 무엇을 했을 때 달랐지 — 회복 칩/행 */
+.ana-rec { display: flex; align-items: center; justify-content: space-between; padding: 8px 0; }
+.ana-rec + .ana-rec { border-top: 1px solid var(--line); }
+.ana-rec__name { font-size: 14.5px; font-weight: 700; color: var(--ink); }
+.ana-rec__tally { font-size: 12.5px; font-weight: 600; color: var(--ink-2); font-variant-numeric: tabular-nums; }

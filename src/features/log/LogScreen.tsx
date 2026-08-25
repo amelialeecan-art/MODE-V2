@@ -1,5 +1,5 @@
 import { useParams, useNavigate } from 'react-router-dom'
-import { Card } from '@/shared/ui/primitives'
+import { GlassCard } from '@/design'
 import { useData } from '@/app/DataContext'
 import { StateForm } from './forms/StateForm'
 import { SleepForm } from './forms/SleepForm'
@@ -7,6 +7,7 @@ import { MealForm } from './forms/MealForm'
 import { CycleForm } from './forms/CycleForm'
 import { ContextForm } from './forms/ContextForm'
 import { RecoveryForm } from './forms/RecoveryForm'
+import './log.css'
 
 const MENU: { kind: string; icon: string; title: string; desc: string; cycleOnly?: boolean }[] = [
   { kind: 'state', icon: '◐', title: '상태 체크인', desc: '아침·저녁 마음과 몸 상태' },
@@ -32,22 +33,22 @@ export function LogScreen() {
   const menu = MENU.filter((m) => !m.cycleOnly || settings.cycleEnabled)
   return (
     <div className="screen">
-      <h1 className="screen__title">기록</h1>
-      <p className="screen__subtitle">무엇을 남길까?</p>
-      <div style={{ marginTop: 18 }}>
+      <header className="screen-head">
+        <h1 className="screen-head__title">기록</h1>
+        <p className="screen-head__sub">무엇을 남길까?</p>
+      </header>
+      <div className="log-menu">
         {menu.map((m) => (
-          <Card key={m.kind}>
-            <button className="row-between" style={{ width: '100%', textAlign: 'left' }} onClick={() => nav(`/log/${m.kind}`)}>
-              <span style={{ display: 'flex', gap: 12, alignItems: 'center' }}>
-                <span style={{ fontSize: 22 }}>{m.icon}</span>
-                <span>
-                  <span className="card__title" style={{ display: 'block' }}>{m.title}</span>
-                  <span className="muted tiny">{m.desc}</span>
-                </span>
+          <GlassCard key={m.kind}>
+            <button className="log-menu__item" onClick={() => nav(`/log/${m.kind}`)}>
+              <span className="log-menu__icon" aria-hidden="true">{m.icon}</span>
+              <span className="log-menu__body">
+                <span className="log-menu__title">{m.title}</span>
+                <span className="log-menu__desc">{m.desc}</span>
               </span>
-              <span className="dim">›</span>
+              <span className="log-menu__chev" aria-hidden="true">›</span>
             </button>
-          </Card>
+          </GlassCard>
         ))}
       </div>
     </div>

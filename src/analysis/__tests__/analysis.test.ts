@@ -34,19 +34,18 @@ describe('baseline delta — 평소보다 +/-', () => {
   })
 })
 
-describe('morning→evening — legacy 제외(시각 신뢰 불가)', () => {
-  it('시각 있는 manual 쌍만 사용', () => {
+describe('morning→evening — 같은 날 아침/저녁 쌍', () => {
+  it('아침·저녁이 모두 있는 날만 paired 로 계산', () => {
     const ms = [
       sm('2026-07-01', { anxiety: 2 }, { checkInType: 'morning' }),
       sm('2026-07-01', { anxiety: 6 }, { checkInType: 'evening' }),
       sm('2026-07-02', { anxiety: 3 }, { checkInType: 'morning' }),
       sm('2026-07-02', { anxiety: 5 }, { checkInType: 'evening' }),
-      // legacy 는 무시돼야 함
-      sm('2026-07-03', { anxiety: 9 }, { checkInType: 'morning', source: 'legacy_import' }),
-      sm('2026-07-03', { anxiety: 0 }, { checkInType: 'evening', source: 'legacy_import' }),
+      // 저녁만 있는 날 — 쌍이 아니므로 제외
+      sm('2026-07-03', { anxiety: 0 }, { checkInType: 'evening' }),
     ]
     const s = morningEveningSummary(ms, 'anxiety')!
-    expect(s.n).toBe(2) // legacy 쌍 제외
+    expect(s.n).toBe(2) // 쌍이 성립한 2일
     expect(s.avgChange).toBe(3) // (+4, +2) 평균
   })
 })
@@ -66,8 +65,8 @@ describe('co-occurrence — 같은 날 비교(순서 없음)', () => {
 })
 
 describe('sleep derive — 가짜 timestamp 안 만듦', () => {
-  const base = { localDate: '2026-07-01', timezoneOffsetMinutes: 540, source: 'legacy_import' as const, schemaVersion: 1, createdAt: '', updatedAt: '' }
-  it('legacy duration 만 있으면 duration 만 반환', () => {
+  const base = { localDate: '2026-07-01', timezoneOffsetMinutes: 540, source: 'manual' as const, schemaVersion: 1, createdAt: '', updatedAt: '' }
+  it('duration 만 있으면 duration 만 반환', () => {
     const ep: SleepEpisode = { ...base, wentToBedAt: null, sleepOnsetAt: null, wakeAt: null, durationMinutes: 480 }
     const d = deriveSleep(ep)
     expect(d.sleepDuration).toBe(480)

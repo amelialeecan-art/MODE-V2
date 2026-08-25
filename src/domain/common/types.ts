@@ -16,13 +16,11 @@ export type ISODate = string
 export type ISODateTime = string
 
 /**
- * 데이터 출처(provenance). 분석기가 신뢰도/처리방식을 달리하는 근거.
- * V1 fallback 을 위한 값이 아니라, record 가 어디서 왔는지 표시만 한다.
+ * 데이터 출처(provenance). record 가 어디서 왔는지 표시만 한다.
  */
 export type DataSource =
   | 'manual' // 사용자가 직접 입력 (신규)
   | 'import' // 백업 JSON 복원
-  | 'legacy_import' // 구 MODE export 를 1회 변환
   | 'derived' // 앱이 계산 (거의 안 씀 — 파생은 원칙적으로 저장 안 함)
 
 /**
@@ -39,15 +37,10 @@ export type TriBoolean = boolean | 'unknown' | null
 /** 현재 record 형태 스키마 버전. 형태가 실제로 바뀔 때만 올린다. */
 export const SCHEMA_VERSION = 1
 
-/** legacy_import 변환 규칙 버전. 변환 공식이 바뀌면 올린다. */
-export const CONVERSION_VERSION = 1
-
 /** 모든 raw record 가 공유하는 provenance 필드. */
 export interface Provenance {
   source: DataSource
   schemaVersion: number
-  /** legacy_import 일 때만 존재. */
-  conversionVersion?: number
   createdAt: ISODateTime
   updatedAt: ISODateTime
 }

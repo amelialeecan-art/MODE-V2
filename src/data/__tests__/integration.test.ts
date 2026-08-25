@@ -1,9 +1,6 @@
 import { describe, it, expect, beforeEach } from 'vitest'
 import { ModeDB } from '@/data/db/db'
 import { createRepositories, type Repositories } from '@/data/repositories'
-import { importLegacyExport } from '@/data/migrations/runMigration'
-import sampleExport from '@/data/migrations/__fixtures__/sampleExport.json'
-import type { LegacyExport } from '@/data/migrations/legacyTypes'
 import { loadDayRecords, loadRange, loadRecordDates } from '@/data/queries/dayQuery'
 import { pickDayState, summarizeDay } from '@/analysis/day/daySummary'
 import { dailyMetricValues } from '@/analysis/associations/coOccurrence'
@@ -17,6 +14,37 @@ let db: ModeDB
 let repos: Repositories
 let n = 0
 beforeEach(() => { db = new ModeDB(`itg-${Date.now()}-${n++}`); repos = createRepositories(db) })
+
+/** V2 raw 만으로 며칠치 기록을 심는다(과거 데이터 변환 없이). */
+async function seedV2(r: Repositories) {
+  const tz = 540
+  for (let i = 1; i <= 5; i++) {
+    const localDate = `2026-06-0${i}`
+    await r.state.put({
+      source: 'manual', localDate, timezoneOffsetMinutes: tz,
+      recordedAt: `${localDate}T21:00:00+09:00`, checkInType: 'evening',
+      promptedMetrics: ['energy', 'anxiety'], metrics: { energy: i + 2, anxiety: i },
+    })
+  }
+  // 시각이 있는 수면(파생 가능) + 시각 없이 duration 만 아는 수면
+  await r.sleep.put({
+    source: 'manual', localDate: '2026-06-01', timezoneOffsetMinutes: tz,
+    wentToBedAt: '2026-05-31T23:00:00+09:00', sleepOnsetAt: '2026-05-31T23:30:00+09:00',
+    wakeAt: '2026-06-01T07:00:00+09:00', satisfaction: 6, durationMinutes: null,
+  })
+  await r.sleep.put({
+    source: 'manual', localDate: '2026-06-02', timezoneOffsetMinutes: tz,
+    wentToBedAt: null, sleepOnsetAt: null, wakeAt: null, satisfaction: 5, durationMinutes: 420,
+  })
+  await r.meal.put({
+    source: 'manual', localDate: '2026-06-02', timezoneOffsetMinutes: tz,
+    startedAt: '2026-06-02T12:30:00+09:00', preCraving: 3,
+  })
+  // 실제 periodStart 1개만 — 관측 주기 없음
+  await r.cycle.put({
+    source: 'manual', localDate: '2026-06-05', timezoneOffsetMinutes: tz, periodStart: true,
+  })
+}
 
 describe('단일 소스: 입력 → Today/Calendar/Rhythm/Analysis 동일 raw', () => {
   it('오늘 저장한 값을 모든 read 경로가 똑같이 읽는다', async () => {
@@ -32,6 +60,39 @@ describe('단일 소스: 입력 → Today/Calendar/Rhythm/Analysis 동일 raw', 
     expect(presence.get(today)?.eveningState).toBe(true) // Calendar dots
     const range = await loadRange(repos, today, today)
     expect(dailyMetricValues(range.state, 'energy').get(today)).toBe(8) // Rhythm/Analysis
+  })
+
+  it('신규 raw 1건: Log → Today → Rhythm → Calendar → Analysis 가 같은 값을 읽는다', async () => {
+    const today = todayLocalDate()
+    // Log 경로(upsertCheckIn) 로 저장. 0/미측정/unknown 삼분 포함.
+    await repos.state.upsertCheckIn({
+      source: 'manual', localDate: today, timezoneOffsetMinutes: 540,
+      recordedAt: nowISO(), checkInType: 'evening',
+      promptedMetrics: ['energy', 'anxiety', 'irritability'], // physicalHunger 는 안 물어봄
+      metrics: { energy: 8, anxiety: 0, irritability: 'unknown' },
+    })
+
+    // Today: 대표 상태값
+    const day = await loadDayRecords(repos, today)
+    const picked = pickDayState(day)
+    expect(picked.find((p) => p.metric === 'energy')?.value).toBe(8)
+    expect(picked.find((p) => p.metric === 'anxiety')?.value).toBe(0) // 실제 0
+    expect(picked.find((p) => p.metric === 'irritability')?.value).toBe('unknown')
+    expect(picked.find((p) => p.metric === 'physicalHunger')).toBeUndefined() // 안 물어봄
+
+    // Calendar: 존재 표시 + 원본
+    const presence = await loadRecordDates(repos, today, today)
+    expect(presence.get(today)?.eveningState).toBe(true)
+    expect(summarizeDay(day).metrics.find((m) => m.metric === 'energy')?.value).toBe(8)
+
+    // Rhythm & Analysis: 같은 range.state 를 읽는다
+    const range = await loadRange(repos, today, today)
+    expect(dailyMetricValues(range.state, 'energy').get(today)).toBe(8)
+    expect(dailyMetricValues(range.state, 'anxiety').get(today)).toBe(0) // 0 은 값
+    expect(dailyMetricValues(range.state, 'irritability').has(today)).toBe(false) // unknown 제외
+    expect(dailyMetricValues(range.state, 'physicalHunger').has(today)).toBe(false) // missing 제외
+    const report = buildAnalysisReport(range, today)
+    expect(report.totalStateDays).toBe(1) // Analysis 도 같은 raw 1건을 센다
   })
 
   it('0 / missing / unknown 의 의미가 모든 read 경로에서 유지된다', async () => {
@@ -64,36 +125,24 @@ describe('단일 소스: 입력 → Today/Calendar/Rhythm/Analysis 동일 raw', 
   })
 })
 
-describe('실제 V2 + migration 과거 데이터 함께 import (#6)', () => {
-  beforeEach(async () => { await importLegacyExport(repos, sampleExport as LegacyExport) })
+describe('V2 raw 만으로 불변식 유지', () => {
+  beforeEach(async () => { await seedV2(repos) })
 
-  it('중복 없음 + 기존 V2 직접입력 우선', async () => {
-    const d = await loadDayRecords(repos, '2026-06-03')
-    const evenings = d.state.filter((s) => s.checkInType === 'evening')
-    expect(evenings).toHaveLength(1) // 중복 아님
-    expect(evenings[0].source).toBe('manual') // V2 직접입력
-    expect(evenings[0].metrics.energy).toBe(7) // V1 값(2)이 덮어쓰지 않음
+  it('시각 없는 수면은 timestamp 를 만들어내지 않는다(duration 만)', async () => {
+    const d = await loadDayRecords(repos, '2026-06-02')
     expect(d.sleep).toHaveLength(1)
-    expect(d.sleep[0].source).toBe('manual') // V2 수면 우선
+    expect(d.sleep[0].wentToBedAt).toBeNull()
+    expect(d.sleep[0].sleepOnsetAt).toBeNull()
+    expect(d.sleep[0].wakeAt).toBeNull()
+    expect(d.sleep[0].durationMinutes).toBe(420)
   })
 
-  it('가짜 sleep timestamp 없음 (legacy 는 duration 만)', async () => {
-    const all = await repos.sleep.all()
-    for (const s of all.filter((x) => x.source === 'legacy_import')) {
-      expect(s.wentToBedAt).toBeNull()
-      expect(s.sleepOnsetAt).toBeNull()
-      expect(s.wakeAt).toBeNull()
-    }
-  })
-
-  it('positiveAffect 과거값 임의 생성 없음', async () => {
+  it('안 물어본 metric(positiveAffect)은 임의로 생성되지 않는다', async () => {
     const all = await repos.state.all()
-    for (const s of all.filter((x) => x.source === 'legacy_import')) {
-      expect('positiveAffect' in s.metrics).toBe(false)
-    }
+    for (const s of all) expect('positiveAffect' in s.metrics).toBe(false)
   })
 
-  it('dailyScores/patternInsights 는 어떤 store 에도 들어오지 않는다', async () => {
+  it('백업 export 에 파생 점수 테이블(dailyScores/patternInsights 등)이 없다', async () => {
     const file = await exportBackup(repos)
     expect(Object.keys(file.tables)).not.toContain('dailyScores')
     expect(Object.keys(file.tables)).not.toContain('patternInsights')
@@ -114,7 +163,7 @@ describe('실제 V2 + migration 과거 데이터 함께 import (#6)', () => {
 
 describe('백업 라운드트립 — 파생 없이 완전 복원', () => {
   it('export → 새 DB import 하면 raw 가 보존되고 파생은 없다', async () => {
-    await importLegacyExport(repos, sampleExport as LegacyExport)
+    await seedV2(repos)
     const file = await exportBackup(repos)
     const db2 = new ModeDB(`itg-restore-${Date.now()}`)
     const repos2 = createRepositories(db2)
@@ -127,8 +176,8 @@ describe('백업 라운드트립 — 파생 없이 완전 복원', () => {
 })
 
 describe('Analysis 는 raw 만으로 재계산된다', () => {
-  it('import 후 리포트가 raw 기반으로 생성된다', async () => {
-    await importLegacyExport(repos, sampleExport as LegacyExport)
+  it('리포트가 raw 기반으로 생성된다', async () => {
+    await seedV2(repos)
     const range = await loadRange(repos, '2026-06-01', '2026-06-30')
     const report = buildAnalysisReport(range, '2026-06-30')
     expect(report.totalStateDays).toBeGreaterThan(0)
